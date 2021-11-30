@@ -1,0 +1,43 @@
+{
+    "exp_base": "experiments",
+    "exp_name": "fine-tune",
+    "device": "cpu",
+    "data": {
+        "train_path": "clip_fine_tune/dataset/train.json",
+        "val_path":  "clip_fine_tune/dataset/validation.json",
+        "test_path": "clip_fine_tune/dataset/test.json"
+    },
+    "data_loader": {
+        "num_workers": 0
+    },
+    "model": {
+        "backbone": "RN50x4"
+    },
+    "solver": {
+        "num_epochs": 20,
+        "batch_size": 16,
+
+        "optimizer": "AdamW",
+
+        "learning_rate": 1e-5,
+        "weight_decay": 1e-4,
+
+        "scheduler": "CosineAnnealingWarmRestarts",
+
+        "T_0": 62,
+        "T_mult": 1,
+
+        "T_max": 7,
+
+        "gamma": 0.85,
+
+        "checkpoint_period": 300,
+        "log_period": 10,
+        "eval_period": 3000000
+    },
+    "test": {
+        "batch_size": 16,
+        "num_workers": 8,
+        "model_path": "experiments/shufflenet_v2_x0_5/1635706596.9750936/best.pth"
+    }
+}
