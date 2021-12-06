@@ -28,8 +28,8 @@ def get_images(path, num=1000):
 
 
 if __name__ == '__main__':
-    # get_images('images')
-    a = 10
-    x = torch.tensor([1, 2, 3])
-    x = torch.tile(x, (a, 1)).reshape((-1, a))
-    print(x.shape)
+    get_images('images')
+    # a = 10
+    # x = torch.tensor([1, 2, 3])
+    # x = torch.tile(x, (a, 1)).reshape((-1, a))
+    # print(x.shape)

@@ -8,8 +8,10 @@ def make_optimizer(cfg, model):
         optimizer = torch.optim.Adam(model.parameters(), lr=cfg.solver.learning_rate,
                                      weight_decay=cfg.solver.weight_decay)
     elif cfg.solver.optimizer == 'AdamW':
-        optimizer = torch.optim.AdamW(model.parameters(), lr=cfg.solver.learning_rate,
+        optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=cfg.solver.learning_rate,
                                       weight_decay=cfg.solver.weight_decay)
+        # optimizer = torch.optim.AdamW(model.parameters(), lr=cfg.solver.learning_rate,
+        #                               weight_decay=cfg.solver.weight_decay)
     return optimizer
 
 

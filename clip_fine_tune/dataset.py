@@ -42,7 +42,7 @@ class ImageDataset(Dataset):
 
 
 def _process_anno(path):
-    data = utils.load_json(path)  # list of [img_path, text]
+    data = utils.load_json(path)  # list of [img_path, text_ls]
     return data
 
 
@@ -52,9 +52,9 @@ def _make_train_loader(cfg, preprocess):
         preprocess,
         T.ToPILImage(),
         T.RandomHorizontalFlip(p=0.5),
-        T.RandomRotation(10),
+        # T.RandomRotation(10),
         T.ToTensor(),
-        AddGaussianNoise(0.1, 0.08),
+        # AddGaussianNoise(0.1, 0.08),
     ])
     anno = _process_anno(cfg.data.train_path)
     dataset = ImageDataset(anno, trm)

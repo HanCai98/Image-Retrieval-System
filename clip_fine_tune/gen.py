@@ -3,12 +3,12 @@ import utils as utils
 import random
 
 
-dataset_base_path = 'images'
-base_output_path = 'clip_fine_tune/dataset'
+dataset_base_path = '../images'
+base_output_path = 'dataset'
 if not os.path.exists(base_output_path):
     os.makedirs(base_output_path)
 
-input_file_path = 'data.json'
+input_file_path = '../data.json'
 dataset = utils.load_json(input_file_path)
 
 train, validation = [], []

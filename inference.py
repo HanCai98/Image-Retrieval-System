@@ -14,6 +14,7 @@ import PIL.Image
 from enum import Enum
 
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+# device = 'cpu'
 
 
 def generate_beam(model, tokenizer, beam_size: int = 5, prompt=None, embed=None,
