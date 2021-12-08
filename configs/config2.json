@@ -6,9 +6,10 @@
         "train_path": "dataset/train",
         "val_path":  "dataset/validation",
         "test_path": "dataset/test",
-
         "num_objects": 15,
         "num_image_position": 4,
+
+        "tokenizer_path": "",
         "max_len": 30
     },
     "data_loader": {

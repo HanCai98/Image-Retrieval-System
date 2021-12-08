@@ -10,11 +10,10 @@ from torch.utils.data.dataset import Dataset
 import utils
 
 
-class ImageDataset(Dataset):
-
-    def __init__(self, dataset, num_objects):
+class PairDataset(Dataset):
+    def __init__(self, dataset, num_objects, tokenizer):
         self.dataset = dataset
-        self.tokenizer = utils.SimpleTokenizer()
+        self.tokenizer = tokenizer
         self.num_objects = num_objects
 
     def __len__(self):
@@ -42,7 +41,9 @@ def _process_anno(path):
 
 def _make_train_loader(cfg):
     anno = _process_anno(cfg.data.train_path)
-    dataset = ImageDataset(anno, cfg.num_objects)
+    tokenizer = utils.SimpleTokenizer(cfg.data.max_len)
+    tokenizer.load_vocab(cfg.data.tokenizer_path)
+    dataset = PairDataset(anno, cfg.num_objects, tokenizer)
     logger = logging.getLogger('train')
     logger.info('Total train samples: {}'.format(len(dataset)))
     dataloader = DataLoader(dataset, batch_size=cfg.solver.batch_size, num_workers=cfg.data_loader.num_workers, shuffle=True)
@@ -51,14 +52,18 @@ def _make_train_loader(cfg):
 
 def _make_val_loader(cfg):
     anno = _process_anno(cfg.data.val_path)
-    dataset = ImageDataset(anno, cfg.num_objects)
+    tokenizer = utils.SimpleTokenizer(cfg.data.max_len)
+    tokenizer.load_vocab(cfg.data.tokenizer_path)
+    dataset = PairDataset(anno, cfg.num_objects, tokenizer)
     dataloader = DataLoader(dataset, batch_size=cfg.test.batch_size, num_workers=cfg.test.num_workers)
     return dataloader
 
 
 def _make_test_loader(cfg):
     anno = _process_anno(cfg.data.test_path)
-    dataset = ImageDataset(anno, cfg.num_objects)
+    tokenizer = utils.SimpleTokenizer(cfg.data.max_len)
+    tokenizer.load_vocab(cfg.data.tokenizer_path)
+    dataset = PairDataset(anno, cfg.num_objects, tokenizer)
     dataloader = DataLoader(dataset, batch_size=cfg.test.batch_size, num_workers=cfg.test.num_workers)
     return dataloader
 

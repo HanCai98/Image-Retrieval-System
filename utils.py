@@ -8,22 +8,20 @@ import pickle
 
 
 class SimpleTokenizer:
-    def __init__(self):
+    def __init__(self, max_len=30):
         self.lemmatizer = WordNetLemmatizer()
         self.word2id = {}  # only contain known words
         self.num_words = 0  # does not include <PAD> and <UNKNOWN>.
         # <UNKNOWN> index: self.num_word; <PAD> index: self.num_word + 1
-        self.max_len = 0
+        self.max_len = max_len
 
-    def build_vocab(self, texts, min_freq=5, file_path='data/vocab.json'):
+    def build_vocab(self, texts, min_freq=5, save_path='data/vocab.json'):
         '''
         :param texts: str, words are split by whitespace. list of list of word.
         :param min_freq: if the frequency of word is less than min_freq, it will be identified as <UNKNOWN>
         '''
         word_freq = {}
         for text in texts:
-            if len(text) > self.max_len:
-                self.max_len = len(text)
             tokens = [self.lemmatizer.lemmatize(w.lower()) for w in text]
             for word in tokens:
                 if word not in word_freq:
@@ -35,7 +33,11 @@ class SimpleTokenizer:
                 word2id[word] = len(word2id)
         self.num_words = len(word2id)
         self.word2id = word2id
-        save_json(self.word2id, file_path)
+        save_json(self.word2id, save_path)
+
+    def load_vocab(self, path):
+        self.word2id = load_json(path)
+        self.num_words = len(self.word2id)
 
     def convert_to_id(self, sentence):
         '''
