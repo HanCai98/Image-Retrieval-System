@@ -1,35 +1,29 @@
-import os
 import json
-import random
-from inference import gen_one_image, load
-from tqdm import tqdm
-import torch
+import os
 
-def save_dic(dic, path):
-    with open(path, 'w') as f:
-        json.dump(dic, f, indent=4)
+image_folder_path = "data/flickr30k-images"
+caption_folder_path = "data/results_20130124.token"
 
+image_list = os.listdir(image_folder_path)
 
-def load_dic(path):
-    with open(path, 'rb') as f:
-        dic = json.load(f)
-    return dic
+with open(caption_folder_path, 'r') as f:
+    content = f.read().split('\n')
 
+dictionary = {}
+for i in range(0, len(content), 5):
+    image_name = content[i].split('#')[0]
+    ls = []
+    for j in range(i, i + 5):
+        caption = content[j].split(maxsplit=1)[-1]
+        ls.append(caption)
 
-def get_images(path, num=1000):
-    clip_model, preprocess, tokenizer, model = load('transformer.pt')
-    fn_list = list(os.listdir(path))
-    random.shuffle(fn_list)
-    fn_list = fn_list[:num]
-    res = {}
-    for fn in tqdm(fn_list):
-        res[fn] = gen_one_image(clip_model, preprocess, tokenizer, model, os.path.join(path, fn))
-    save_dic(res, 'data.json')
+    ls.append(os.path.join(image_folder_path, image_name))
+    dictionary[image_name] = ls
+    # print(image_name)
+    # print(ls)
 
+f = open("data.json", "w")
+json.dump(dictionary, f, indent=4)
+f.close()
 
-if __name__ == '__main__':
-    get_images('images')
-    # a = 10
-    # x = torch.tensor([1, 2, 3])
-    # x = torch.tile(x, (a, 1)).reshape((-1, a))
-    # print(x.shape)
+print("Successful!")
