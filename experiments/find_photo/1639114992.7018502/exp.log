@@ -1,0 +1,502 @@
+2021-12-10 05:43:12,702 - root - INFO - Train with config:
+DotMap(exp_base='experiments', exp_name='find_photo', device='cuda', data=DotMap(train_path='../Flickr30k-Dataset/flickr30k-all/train', val_path='../Flickr30k-Dataset/flickr30k-all/validation', test_path='../Flickr30k-Dataset/flickr30k-all/test', num_workers=4, num_objects=15, num_image_position=4, vocab_path='vocab.json', max_len=30, vocab_size=6404), model=DotMap(backbone='transformer', embedding_size=512, image_encoder_dropout_rate=0.2, image_embedding_dropout_rate=0.1, num_image_encoder_head=1, num_image_encoder_layer=2, text_encoder_dropout_rate=0.3, text_embedding_dropout_rate=0.2, num_text_encoder_head=1, num_text_encoder_layer=2), solver=DotMap(num_epochs=120, batch_size=128, optimizer='AdamW', learning_rate=0.0005, weight_decay=1e-08, max_grad_norm=2, scheduler='StepLR', checkpoint_period=4000, log_period=10, eval_period=300, eval_loss_period=40), test=DotMap(batch_size=64, num_workers=4, pretrained_path='experiments/find_photo/1639089690.9783187/best.pth', images_base_path='../Flickr30k-Dataset/flickr30k-images'), output_dir='experiments/find_photo/1639114992.7018502')
+2021-12-10 05:43:16,742 - root - INFO - model architecture:
+2021-12-10 05:43:16,742 - root - INFO - Model(
+  (image_encoder): ImageEncoder(
+    (position_embedding_layer): Linear(in_features=4, out_features=512, bias=True)
+    (layer_norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+    (dropout): Dropout(p=0.1, inplace=False)
+    (linear_projection): Linear(in_features=512, out_features=512, bias=True)
+    (encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): TransformerEncoderLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+          )
+          (linear1): Linear(in_features=512, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.2, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=512, bias=True)
+          (norm1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+          (norm2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+          (dropout1): Dropout(p=0.2, inplace=False)
+          (dropout2): Dropout(p=0.2, inplace=False)
+        )
+        (1): TransformerEncoderLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+          )
+          (linear1): Linear(in_features=512, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.2, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=512, bias=True)
+          (norm1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+          (norm2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+          (dropout1): Dropout(p=0.2, inplace=False)
+          (dropout2): Dropout(p=0.2, inplace=False)
+        )
+      )
+    )
+  )
+  (text_encoder): TextEncoder(
+    (word_embeddings): Embedding(6404, 512)
+    (pos_encoder): PositionalEncoding(
+      (dropout): Dropout(p=0.2, inplace=False)
+    )
+    (transformer_encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): TransformerEncoderLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+          )
+          (linear1): Linear(in_features=512, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.3, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=512, bias=True)
+          (norm1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+          (norm2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+          (dropout1): Dropout(p=0.3, inplace=False)
+          (dropout2): Dropout(p=0.3, inplace=False)
+        )
+        (1): TransformerEncoderLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+          )
+          (linear1): Linear(in_features=512, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.3, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=512, bias=True)
+          (norm1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+          (norm2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+          (dropout1): Dropout(p=0.3, inplace=False)
+          (dropout2): Dropout(p=0.3, inplace=False)
+        )
+      )
+    )
+  )
+  (interaction_model): InteractionModel()
+)
+2021-12-10 05:43:16,791 - train - INFO - Total train samples: 29783
+2021-12-10 05:43:17,740 - tensorflow - DEBUG - Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+2021-12-10 05:43:18,249 - train - INFO - Trainer Built.
+2021-12-10 05:43:24,687 - train - INFO - step: 10, loss: 4.852207660675049
+2021-12-10 05:43:28,031 - train - INFO - step: 20, loss: 4.853155612945557
+2021-12-10 05:43:31,422 - train - INFO - step: 30, loss: 4.852156162261963
+2021-12-10 05:43:34,837 - train - INFO - step: 40, loss: 4.853084564208984
+2021-12-10 05:43:38,384 - train - INFO - Validation loss: 4.129495456814766
+2021-12-10 05:43:38,384 - train - INFO - Min loss: 4.129495456814766
+2021-12-10 05:43:38,482 - train - INFO - --------------------
+2021-12-10 05:43:41,932 - train - INFO - step: 50, loss: 4.851973056793213
+2021-12-10 05:43:45,420 - train - INFO - step: 60, loss: 4.85056734085083
+2021-12-10 05:43:48,971 - train - INFO - step: 70, loss: 4.852983474731445
+2021-12-10 05:43:52,560 - train - INFO - step: 80, loss: 4.8500471115112305
+2021-12-10 05:43:55,936 - train - INFO - Validation loss: 4.129491627216339
+2021-12-10 05:43:55,937 - train - INFO - Min loss: 4.129491627216339
+2021-12-10 05:43:56,423 - train - INFO - --------------------
+2021-12-10 05:44:00,013 - train - INFO - step: 90, loss: 4.852799415588379
+2021-12-10 05:44:03,559 - train - INFO - step: 100, loss: 4.85474157333374
+2021-12-10 05:44:07,055 - train - INFO - step: 110, loss: 4.852069854736328
+2021-12-10 05:44:10,506 - train - INFO - step: 120, loss: 4.852999210357666
+2021-12-10 05:44:13,915 - train - INFO - Validation loss: 4.129502207040787
+2021-12-10 05:44:13,916 - train - INFO - --------------------
+2021-12-10 05:44:17,282 - train - INFO - step: 130, loss: 4.853322982788086
+2021-12-10 05:44:20,654 - train - INFO - step: 140, loss: 4.851712703704834
+2021-12-10 05:44:24,009 - train - INFO - step: 150, loss: 4.8527069091796875
+2021-12-10 05:44:27,371 - train - INFO - step: 160, loss: 4.852571487426758
+2021-12-10 05:44:30,717 - train - INFO - Validation loss: 4.129506587982178
+2021-12-10 05:44:30,718 - train - INFO - --------------------
+2021-12-10 05:44:34,035 - train - INFO - step: 170, loss: 4.8536906242370605
+2021-12-10 05:44:37,367 - train - INFO - step: 180, loss: 4.85203742980957
+2021-12-10 05:44:40,707 - train - INFO - step: 190, loss: 4.8517913818359375
+2021-12-10 05:44:44,058 - train - INFO - step: 200, loss: 4.8518757820129395
+2021-12-10 05:44:47,469 - train - INFO - Validation loss: 4.129506379365921
+2021-12-10 05:44:47,470 - train - INFO - --------------------
+2021-12-10 05:44:50,819 - train - INFO - step: 210, loss: 4.852958679199219
+2021-12-10 05:44:54,208 - train - INFO - step: 220, loss: 4.852015018463135
+2021-12-10 05:44:57,622 - train - INFO - step: 230, loss: 4.851833343505859
+2021-12-10 05:44:58,049 - train - INFO - Epoch 0 done
+2021-12-10 05:44:58,049 - train - INFO - loss: 4.853640083608957
+2021-12-10 05:44:58,049 - train - INFO - --------------------
+2021-12-10 05:45:03,902 - train - INFO - step: 240, loss: 4.852499008178711
+2021-12-10 05:45:07,238 - train - INFO - Validation loss: 4.1295052617788315
+2021-12-10 05:45:07,239 - train - INFO - --------------------
+2021-12-10 05:45:10,705 - train - INFO - step: 250, loss: 4.851922988891602
+2021-12-10 05:45:14,189 - train - INFO - step: 260, loss: 4.8525614738464355
+2021-12-10 05:45:17,686 - train - INFO - step: 270, loss: 4.850969314575195
+2021-12-10 05:45:21,178 - train - INFO - step: 280, loss: 4.851805686950684
+2021-12-10 05:45:24,553 - train - INFO - Validation loss: 4.129506558179855
+2021-12-10 05:45:24,554 - train - INFO - --------------------
+2021-12-10 05:45:27,991 - train - INFO - step: 290, loss: 4.853610515594482
+2021-12-10 05:45:31,432 - train - INFO - step: 300, loss: 4.853055953979492
+2021-12-10 05:45:38,492 - train - INFO - Retrieve on validation:
+2021-12-10 05:45:38,492 - train - INFO - top1_acc, top5_acc, top10_acc: 0.0010000000474974513, 0.005000000353902578, 0.010999999940395355
+2021-12-10 05:45:38,492 - train - INFO - --------------------
+2021-12-10 05:45:41,890 - train - INFO - step: 310, loss: 4.851511001586914
+2021-12-10 05:45:45,296 - train - INFO - step: 320, loss: 4.8534932136535645
+2021-12-10 05:45:48,819 - train - INFO - Validation loss: 4.129505291581154
+2021-12-10 05:45:48,820 - train - INFO - --------------------
+2021-12-10 05:45:52,179 - train - INFO - step: 330, loss: 4.854195594787598
+2021-12-10 05:45:55,555 - train - INFO - step: 340, loss: 4.852852821350098
+2021-12-10 05:45:58,938 - train - INFO - step: 350, loss: 4.851500034332275
+2021-12-10 05:46:02,321 - train - INFO - step: 360, loss: 4.851871013641357
+2021-12-10 05:46:05,842 - train - INFO - Validation loss: 4.12950673699379
+2021-12-10 05:46:05,843 - train - INFO - --------------------
+2021-12-10 05:46:09,208 - train - INFO - step: 370, loss: 4.851748943328857
+2021-12-10 05:46:12,605 - train - INFO - step: 380, loss: 4.853362083435059
+2021-12-10 05:46:16,012 - train - INFO - step: 390, loss: 4.852283477783203
+2021-12-10 05:46:19,438 - train - INFO - step: 400, loss: 4.853772163391113
+2021-12-10 05:46:23,196 - train - INFO - Validation loss: 4.129507437348366
+2021-12-10 05:46:23,196 - train - INFO - --------------------
+2021-12-10 05:46:26,607 - train - INFO - step: 410, loss: 4.851837158203125
+2021-12-10 05:46:30,036 - train - INFO - step: 420, loss: 4.8533735275268555
+2021-12-10 05:46:33,486 - train - INFO - step: 430, loss: 4.850327014923096
+2021-12-10 05:46:36,933 - train - INFO - step: 440, loss: 4.851530075073242
+2021-12-10 05:46:40,267 - train - INFO - Validation loss: 4.129507750272751
+2021-12-10 05:46:40,267 - train - INFO - --------------------
+2021-12-10 05:46:43,681 - train - INFO - step: 450, loss: 4.853426456451416
+2021-12-10 05:46:47,108 - train - INFO - step: 460, loss: 4.8518290519714355
+2021-12-10 05:46:48,215 - train - INFO - Epoch 1 done
+2021-12-10 05:46:48,216 - train - INFO - loss: 4.852406059873515
+2021-12-10 05:46:48,216 - train - INFO - --------------------
+2021-12-10 05:46:53,319 - train - INFO - step: 470, loss: 4.853394508361816
+2021-12-10 05:46:56,719 - train - INFO - step: 480, loss: 4.852446556091309
+2021-12-10 05:47:00,037 - train - INFO - Validation loss: 4.129507079720497
+2021-12-10 05:47:00,037 - train - INFO - --------------------
+2021-12-10 05:47:03,418 - train - INFO - step: 490, loss: 4.8510284423828125
+2021-12-10 05:47:06,815 - train - INFO - step: 500, loss: 4.851601600646973
+2021-12-10 05:47:10,233 - train - INFO - step: 510, loss: 4.852617263793945
+2021-12-10 05:47:13,653 - train - INFO - step: 520, loss: 4.8510613441467285
+2021-12-10 05:47:17,009 - train - INFO - Validation loss: 4.129507750272751
+2021-12-10 05:47:17,010 - train - INFO - --------------------
+2021-12-10 05:47:20,394 - train - INFO - step: 530, loss: 4.852481365203857
+2021-12-10 05:47:23,798 - train - INFO - step: 540, loss: 4.854875564575195
+2021-12-10 05:47:27,223 - train - INFO - step: 550, loss: 4.85338020324707
+2021-12-10 05:47:30,656 - train - INFO - step: 560, loss: 4.854117393493652
+2021-12-10 05:47:34,047 - train - INFO - Validation loss: 4.129507824778557
+2021-12-10 05:47:34,048 - train - INFO - --------------------
+2021-12-10 05:47:37,441 - train - INFO - step: 570, loss: 4.8525238037109375
+2021-12-10 05:47:40,858 - train - INFO - step: 580, loss: 4.8519487380981445
+2021-12-10 05:47:44,284 - train - INFO - step: 590, loss: 4.852168560028076
+2021-12-10 05:47:47,731 - train - INFO - step: 600, loss: 4.851186752319336
+2021-12-10 05:47:54,741 - train - INFO - Retrieve on validation:
+2021-12-10 05:47:54,741 - train - INFO - top1_acc, top5_acc, top10_acc: 0.0010000000474974513, 0.005000000353902578, 0.010000000707805157
+2021-12-10 05:47:54,741 - train - INFO - --------------------
+2021-12-10 05:47:58,060 - train - INFO - Validation loss: 4.129507809877396
+2021-12-10 05:47:58,061 - train - INFO - --------------------
+2021-12-10 05:48:01,444 - train - INFO - step: 610, loss: 4.851813316345215
+2021-12-10 05:48:04,859 - train - INFO - step: 620, loss: 4.852341651916504
+2021-12-10 05:48:08,288 - train - INFO - step: 630, loss: 4.851395130157471
+2021-12-10 05:48:11,726 - train - INFO - step: 640, loss: 4.852138519287109
+2021-12-10 05:48:15,194 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 05:48:15,194 - train - INFO - --------------------
+2021-12-10 05:48:18,585 - train - INFO - step: 650, loss: 4.853282928466797
+2021-12-10 05:48:22,000 - train - INFO - step: 660, loss: 4.853246688842773
+2021-12-10 05:48:25,425 - train - INFO - step: 670, loss: 4.851716041564941
+2021-12-10 05:48:28,868 - train - INFO - step: 680, loss: 4.853250026702881
+2021-12-10 05:48:32,232 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 05:48:32,233 - train - INFO - --------------------
+2021-12-10 05:48:35,646 - train - INFO - step: 690, loss: 4.8530120849609375
+2021-12-10 05:48:37,442 - train - INFO - Epoch 2 done
+2021-12-10 05:48:37,442 - train - INFO - loss: 4.852480062123003
+2021-12-10 05:48:37,443 - train - INFO - --------------------
+2021-12-10 05:48:41,973 - train - INFO - step: 700, loss: 4.850794315338135
+2021-12-10 05:48:45,379 - train - INFO - step: 710, loss: 4.8518967628479
+2021-12-10 05:48:48,802 - train - INFO - step: 720, loss: 4.851321220397949
+2021-12-10 05:48:52,151 - train - INFO - Validation loss: 4.129507899284363
+2021-12-10 05:48:52,151 - train - INFO - --------------------
+2021-12-10 05:48:55,557 - train - INFO - step: 730, loss: 4.852405548095703
+2021-12-10 05:48:58,983 - train - INFO - step: 740, loss: 4.852500915527344
+2021-12-10 05:49:02,420 - train - INFO - step: 750, loss: 4.851128578186035
+2021-12-10 05:49:05,865 - train - INFO - step: 760, loss: 4.8537445068359375
+2021-12-10 05:49:09,351 - train - INFO - Validation loss: 4.129507809877396
+2021-12-10 05:49:09,352 - train - INFO - --------------------
+2021-12-10 05:49:12,747 - train - INFO - step: 770, loss: 4.853086471557617
+2021-12-10 05:49:16,154 - train - INFO - step: 780, loss: 4.852744102478027
+2021-12-10 05:49:19,563 - train - INFO - step: 790, loss: 4.851663112640381
+2021-12-10 05:49:22,987 - train - INFO - step: 800, loss: 4.851541042327881
+2021-12-10 05:49:26,365 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 05:49:26,365 - train - INFO - --------------------
+2021-12-10 05:49:29,746 - train - INFO - step: 810, loss: 4.852680206298828
+2021-12-10 05:49:33,149 - train - INFO - step: 820, loss: 4.851108551025391
+2021-12-10 05:49:36,561 - train - INFO - step: 830, loss: 4.853085994720459
+2021-12-10 05:49:39,978 - train - INFO - step: 840, loss: 4.85250186920166
+2021-12-10 05:49:43,713 - train - INFO - Validation loss: 4.129507929086685
+2021-12-10 05:49:43,714 - train - INFO - --------------------
+2021-12-10 05:49:47,092 - train - INFO - step: 850, loss: 4.852062225341797
+2021-12-10 05:49:50,483 - train - INFO - step: 860, loss: 4.85165548324585
+2021-12-10 05:49:53,896 - train - INFO - step: 870, loss: 4.8518900871276855
+2021-12-10 05:49:57,320 - train - INFO - step: 880, loss: 4.85128927230835
+2021-12-10 05:50:00,864 - train - INFO - Validation loss: 4.129507929086685
+2021-12-10 05:50:00,865 - train - INFO - --------------------
+2021-12-10 05:50:04,246 - train - INFO - step: 890, loss: 4.851063251495361
+2021-12-10 05:50:07,648 - train - INFO - step: 900, loss: 4.851040363311768
+2021-12-10 05:50:14,966 - train - INFO - Retrieve on validation:
+2021-12-10 05:50:14,966 - train - INFO - top1_acc, top5_acc, top10_acc: 0.0010000000474974513, 0.005000000353902578, 0.010000000707805157
+2021-12-10 05:50:14,966 - train - INFO - --------------------
+2021-12-10 05:50:18,367 - train - INFO - step: 910, loss: 4.8520402908325195
+2021-12-10 05:50:21,781 - train - INFO - step: 920, loss: 4.851798057556152
+2021-12-10 05:50:25,078 - train - INFO - Validation loss: 4.12950798869133
+2021-12-10 05:50:25,079 - train - INFO - --------------------
+2021-12-10 05:50:27,536 - train - INFO - Epoch 3 done
+2021-12-10 05:50:27,536 - train - INFO - loss: 4.852241575717926
+2021-12-10 05:50:27,536 - train - INFO - --------------------
+2021-12-10 05:50:31,283 - train - INFO - step: 930, loss: 4.8513336181640625
+2021-12-10 05:50:34,684 - train - INFO - step: 940, loss: 4.851322650909424
+2021-12-10 05:50:38,100 - train - INFO - step: 950, loss: 4.850827693939209
+2021-12-10 05:50:41,531 - train - INFO - step: 960, loss: 4.853171348571777
+2021-12-10 05:50:44,981 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 05:50:44,982 - train - INFO - --------------------
+2021-12-10 05:50:48,393 - train - INFO - step: 970, loss: 4.850207328796387
+2021-12-10 05:50:51,822 - train - INFO - step: 980, loss: 4.8525166511535645
+2021-12-10 05:50:55,254 - train - INFO - step: 990, loss: 4.852079391479492
+2021-12-10 05:50:58,696 - train - INFO - step: 1000, loss: 4.851660251617432
+2021-12-10 05:51:02,162 - train - INFO - Validation loss: 4.129507809877396
+2021-12-10 05:51:02,163 - train - INFO - --------------------
+2021-12-10 05:51:05,551 - train - INFO - step: 1010, loss: 4.852926731109619
+2021-12-10 05:51:08,952 - train - INFO - step: 1020, loss: 4.851504802703857
+2021-12-10 05:51:12,368 - train - INFO - step: 1030, loss: 4.852685928344727
+2021-12-10 05:51:15,789 - train - INFO - step: 1040, loss: 4.850261688232422
+2021-12-10 05:51:19,123 - train - INFO - Validation loss: 4.129508078098297
+2021-12-10 05:51:19,124 - train - INFO - --------------------
+2021-12-10 05:51:22,497 - train - INFO - step: 1050, loss: 4.852154731750488
+2021-12-10 05:51:25,882 - train - INFO - step: 1060, loss: 4.853767395019531
+2021-12-10 05:51:29,284 - train - INFO - step: 1070, loss: 4.85166072845459
+2021-12-10 05:51:32,693 - train - INFO - step: 1080, loss: 4.84957218170166
+2021-12-10 05:51:36,094 - train - INFO - Validation loss: 4.129507750272751
+2021-12-10 05:51:36,095 - train - INFO - --------------------
+2021-12-10 05:51:39,456 - train - INFO - step: 1090, loss: 4.852048397064209
+2021-12-10 05:51:42,840 - train - INFO - step: 1100, loss: 4.853558540344238
+2021-12-10 05:51:46,237 - train - INFO - step: 1110, loss: 4.851330280303955
+2021-12-10 05:51:49,648 - train - INFO - step: 1120, loss: 4.853148937225342
+2021-12-10 05:51:53,218 - train - INFO - Validation loss: 4.129507899284363
+2021-12-10 05:51:53,218 - train - INFO - --------------------
+2021-12-10 05:51:56,602 - train - INFO - step: 1130, loss: 4.849802017211914
+2021-12-10 05:51:59,999 - train - INFO - step: 1140, loss: 4.851768493652344
+2021-12-10 05:52:03,409 - train - INFO - step: 1150, loss: 4.852646827697754
+2021-12-10 05:52:06,583 - train - INFO - Epoch 4 done
+2021-12-10 05:52:06,584 - train - INFO - loss: 4.852205375145221
+2021-12-10 05:52:06,584 - train - INFO - --------------------
+2021-12-10 05:52:09,906 - train - INFO - step: 1160, loss: 4.852426052093506
+2021-12-10 05:52:13,488 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 05:52:13,489 - train - INFO - --------------------
+2021-12-10 05:52:16,868 - train - INFO - step: 1170, loss: 4.8533430099487305
+2021-12-10 05:52:20,286 - train - INFO - step: 1180, loss: 4.851967811584473
+2021-12-10 05:52:23,719 - train - INFO - step: 1190, loss: 4.851789951324463
+2021-12-10 05:52:27,167 - train - INFO - step: 1200, loss: 4.850858211517334
+2021-12-10 05:52:34,235 - train - INFO - Retrieve on validation:
+2021-12-10 05:52:34,235 - train - INFO - top1_acc, top5_acc, top10_acc: 0.0010000000474974513, 0.005000000353902578, 0.010000000707805157
+2021-12-10 05:52:34,235 - train - INFO - --------------------
+2021-12-10 05:52:37,575 - train - INFO - Validation loss: 4.129507914185524
+2021-12-10 05:52:37,576 - train - INFO - --------------------
+2021-12-10 05:52:40,980 - train - INFO - step: 1210, loss: 4.852579116821289
+2021-12-10 05:52:44,391 - train - INFO - step: 1220, loss: 4.853220462799072
+2021-12-10 05:52:47,818 - train - INFO - step: 1230, loss: 4.851096153259277
+2021-12-10 05:52:51,254 - train - INFO - step: 1240, loss: 4.851292610168457
+2021-12-10 05:52:54,559 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 05:52:54,559 - train - INFO - --------------------
+2021-12-10 05:52:57,946 - train - INFO - step: 1250, loss: 4.8531012535095215
+2021-12-10 05:53:01,338 - train - INFO - step: 1260, loss: 4.852368354797363
+2021-12-10 05:53:04,742 - train - INFO - step: 1270, loss: 4.853411674499512
+2021-12-10 05:53:08,137 - train - INFO - step: 1280, loss: 4.853160858154297
+2021-12-10 05:53:11,660 - train - INFO - Validation loss: 4.129507929086685
+2021-12-10 05:53:11,661 - train - INFO - --------------------
+2021-12-10 05:53:15,012 - train - INFO - step: 1290, loss: 4.852839469909668
+2021-12-10 05:53:18,362 - train - INFO - step: 1300, loss: 4.8514909744262695
+2021-12-10 05:53:21,727 - train - INFO - step: 1310, loss: 4.851806640625
+2021-12-10 05:53:25,099 - train - INFO - step: 1320, loss: 4.849947929382324
+2021-12-10 05:53:28,650 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 05:53:28,650 - train - INFO - --------------------
+2021-12-10 05:53:32,017 - train - INFO - step: 1330, loss: 4.852476596832275
+2021-12-10 05:53:35,433 - train - INFO - step: 1340, loss: 4.85167121887207
+2021-12-10 05:53:38,870 - train - INFO - step: 1350, loss: 4.852895259857178
+2021-12-10 05:53:42,322 - train - INFO - step: 1360, loss: 4.852171421051025
+2021-12-10 05:53:45,868 - train - INFO - Validation loss: 4.129507943987846
+2021-12-10 05:53:45,869 - train - INFO - --------------------
+2021-12-10 05:53:49,300 - train - INFO - step: 1370, loss: 4.853891372680664
+2021-12-10 05:53:52,747 - train - INFO - step: 1380, loss: 4.85327672958374
+2021-12-10 05:53:56,194 - train - INFO - step: 1390, loss: 4.851747035980225
+2021-12-10 05:53:56,618 - train - INFO - Epoch 5 done
+2021-12-10 05:53:56,618 - train - INFO - loss: 4.852183035735426
+2021-12-10 05:53:56,618 - train - INFO - --------------------
+2021-12-10 05:54:02,718 - train - INFO - step: 1400, loss: 4.851743698120117
+2021-12-10 05:54:06,305 - train - INFO - Validation loss: 4.129507839679718
+2021-12-10 05:54:06,306 - train - INFO - --------------------
+2021-12-10 05:54:09,679 - train - INFO - step: 1410, loss: 4.852380752563477
+2021-12-10 05:54:13,064 - train - INFO - step: 1420, loss: 4.852487087249756
+2021-12-10 05:54:16,462 - train - INFO - step: 1430, loss: 4.852588653564453
+2021-12-10 05:54:19,873 - train - INFO - step: 1440, loss: 4.852494239807129
+2021-12-10 05:54:23,234 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 05:54:23,234 - train - INFO - --------------------
+2021-12-10 05:54:26,615 - train - INFO - step: 1450, loss: 4.851072788238525
+2021-12-10 05:54:30,015 - train - INFO - step: 1460, loss: 4.852411270141602
+2021-12-10 05:54:33,432 - train - INFO - step: 1470, loss: 4.851769924163818
+2021-12-10 05:54:36,870 - train - INFO - step: 1480, loss: 4.853113651275635
+2021-12-10 05:54:40,371 - train - INFO - Validation loss: 4.129507750272751
+2021-12-10 05:54:40,372 - train - INFO - --------------------
+2021-12-10 05:54:43,775 - train - INFO - step: 1490, loss: 4.850674629211426
+2021-12-10 05:54:47,189 - train - INFO - step: 1500, loss: 4.8528151512146
+2021-12-10 05:54:54,249 - train - INFO - Retrieve on validation:
+2021-12-10 05:54:54,249 - train - INFO - top1_acc, top5_acc, top10_acc: 0.0010000000474974513, 0.005000000353902578, 0.010000000707805157
+2021-12-10 05:54:54,249 - train - INFO - --------------------
+2021-12-10 05:54:57,651 - train - INFO - step: 1510, loss: 4.854406833648682
+2021-12-10 05:55:01,072 - train - INFO - step: 1520, loss: 4.85252046585083
+2021-12-10 05:55:04,479 - train - INFO - Validation loss: 4.129507914185524
+2021-12-10 05:55:04,480 - train - INFO - --------------------
+2021-12-10 05:55:07,863 - train - INFO - step: 1530, loss: 4.8519368171691895
+2021-12-10 05:55:11,261 - train - INFO - step: 1540, loss: 4.851333141326904
+2021-12-10 05:55:14,665 - train - INFO - step: 1550, loss: 4.853616237640381
+2021-12-10 05:55:18,068 - train - INFO - step: 1560, loss: 4.851391792297363
+2021-12-10 05:55:21,457 - train - INFO - Validation loss: 4.129507809877396
+2021-12-10 05:55:21,458 - train - INFO - --------------------
+2021-12-10 05:55:24,822 - train - INFO - step: 1570, loss: 4.8522725105285645
+2021-12-10 05:55:28,200 - train - INFO - step: 1580, loss: 4.85106086730957
+2021-12-10 05:55:31,602 - train - INFO - step: 1590, loss: 4.8522539138793945
+2021-12-10 05:55:35,014 - train - INFO - step: 1600, loss: 4.853038787841797
+2021-12-10 05:55:38,398 - train - INFO - Validation loss: 4.1295077204704285
+2021-12-10 05:55:38,399 - train - INFO - --------------------
+2021-12-10 05:55:41,749 - train - INFO - step: 1610, loss: 4.852543830871582
+2021-12-10 05:55:45,131 - train - INFO - step: 1620, loss: 4.852256774902344
+2021-12-10 05:55:46,233 - train - INFO - Epoch 6 done
+2021-12-10 05:55:46,233 - train - INFO - loss: 4.852129564203065
+2021-12-10 05:55:46,233 - train - INFO - --------------------
+2021-12-10 05:55:51,343 - train - INFO - step: 1630, loss: 4.851974010467529
+2021-12-10 05:55:54,736 - train - INFO - step: 1640, loss: 4.851497173309326
+2021-12-10 05:55:58,081 - train - INFO - Validation loss: 4.129507899284363
+2021-12-10 05:55:58,082 - train - INFO - --------------------
+2021-12-10 05:56:01,469 - train - INFO - step: 1650, loss: 4.852928161621094
+2021-12-10 05:56:04,889 - train - INFO - step: 1660, loss: 4.85320520401001
+2021-12-10 05:56:08,332 - train - INFO - step: 1670, loss: 4.851547718048096
+2021-12-10 05:56:11,781 - train - INFO - step: 1680, loss: 4.851224899291992
+2021-12-10 05:56:15,328 - train - INFO - Validation loss: 4.129507943987846
+2021-12-10 05:56:15,329 - train - INFO - --------------------
+2021-12-10 05:56:18,736 - train - INFO - step: 1690, loss: 4.850304126739502
+2021-12-10 05:56:22,167 - train - INFO - step: 1700, loss: 4.853479862213135
+2021-12-10 05:56:25,621 - train - INFO - step: 1710, loss: 4.852123260498047
+2021-12-10 05:56:29,076 - train - INFO - step: 1720, loss: 4.851993083953857
+2021-12-10 05:56:32,634 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 05:56:32,634 - train - INFO - --------------------
+2021-12-10 05:56:36,030 - train - INFO - step: 1730, loss: 4.852768421173096
+2021-12-10 05:56:39,443 - train - INFO - step: 1740, loss: 4.852682590484619
+2021-12-10 05:56:42,849 - train - INFO - step: 1750, loss: 4.852694511413574
+2021-12-10 05:56:46,272 - train - INFO - step: 1760, loss: 4.852441310882568
+2021-12-10 05:56:49,880 - train - INFO - Validation loss: 4.129507899284363
+2021-12-10 05:56:49,881 - train - INFO - --------------------
+2021-12-10 05:56:53,243 - train - INFO - step: 1770, loss: 4.853039264678955
+2021-12-10 05:56:56,628 - train - INFO - step: 1780, loss: 4.851782321929932
+2021-12-10 05:57:00,025 - train - INFO - step: 1790, loss: 4.852138042449951
+2021-12-10 05:57:03,437 - train - INFO - step: 1800, loss: 4.852715969085693
+2021-12-10 05:57:10,680 - train - INFO - Retrieve on validation:
+2021-12-10 05:57:10,681 - train - INFO - top1_acc, top5_acc, top10_acc: 0.0010000000474974513, 0.005000000353902578, 0.010000000707805157
+2021-12-10 05:57:10,681 - train - INFO - --------------------
+2021-12-10 05:57:14,212 - train - INFO - Validation loss: 4.129507809877396
+2021-12-10 05:57:14,213 - train - INFO - --------------------
+2021-12-10 05:57:17,568 - train - INFO - step: 1810, loss: 4.85206413269043
+2021-12-10 05:57:20,951 - train - INFO - step: 1820, loss: 4.853547096252441
+2021-12-10 05:57:24,357 - train - INFO - step: 1830, loss: 4.852059841156006
+2021-12-10 05:57:27,804 - train - INFO - step: 1840, loss: 4.851542949676514
+2021-12-10 05:57:31,326 - train - INFO - Validation loss: 4.129507899284363
+2021-12-10 05:57:31,327 - train - INFO - --------------------
+2021-12-10 05:57:34,764 - train - INFO - step: 1850, loss: 4.851546287536621
+2021-12-10 05:57:36,591 - train - INFO - Epoch 7 done
+2021-12-10 05:57:36,591 - train - INFO - loss: 4.852195819904065
+2021-12-10 05:57:36,591 - train - INFO - --------------------
+2021-12-10 05:57:41,146 - train - INFO - step: 1860, loss: 4.852186679840088
+2021-12-10 05:57:44,576 - train - INFO - step: 1870, loss: 4.851668357849121
+2021-12-10 05:57:48,027 - train - INFO - step: 1880, loss: 4.850892066955566
+2021-12-10 05:57:51,404 - train - INFO - Validation loss: 4.129507765173912
+2021-12-10 05:57:51,405 - train - INFO - --------------------
+2021-12-10 05:57:54,800 - train - INFO - step: 1890, loss: 4.853256702423096
+2021-12-10 05:57:58,221 - train - INFO - step: 1900, loss: 4.853122234344482
+2021-12-10 05:58:01,643 - train - INFO - step: 1910, loss: 4.851715564727783
+2021-12-10 05:58:05,068 - train - INFO - step: 1920, loss: 4.8521552085876465
+2021-12-10 05:58:08,528 - train - INFO - Validation loss: 4.129507765173912
+2021-12-10 05:58:08,529 - train - INFO - --------------------
+2021-12-10 05:58:11,901 - train - INFO - step: 1930, loss: 4.851301193237305
+2021-12-10 05:58:15,287 - train - INFO - step: 1940, loss: 4.851085186004639
+2021-12-10 05:58:18,694 - train - INFO - step: 1950, loss: 4.852102279663086
+2021-12-10 05:58:22,108 - train - INFO - step: 1960, loss: 4.851998805999756
+2021-12-10 05:58:25,398 - train - INFO - Validation loss: 4.129507839679718
+2021-12-10 05:58:25,399 - train - INFO - --------------------
+2021-12-10 05:58:28,767 - train - INFO - step: 1970, loss: 4.851063251495361
+2021-12-10 05:58:32,152 - train - INFO - step: 1980, loss: 4.851104259490967
+2021-12-10 05:58:35,556 - train - INFO - step: 1990, loss: 4.8527069091796875
+2021-12-10 05:58:38,963 - train - INFO - step: 2000, loss: 4.851245880126953
+2021-12-10 05:58:42,285 - train - INFO - Validation loss: 4.129507809877396
+2021-12-10 05:58:42,286 - train - INFO - --------------------
+2021-12-10 05:58:45,667 - train - INFO - step: 2010, loss: 4.850813865661621
+2021-12-10 05:58:49,076 - train - INFO - step: 2020, loss: 4.852168560028076
+2021-12-10 05:58:52,504 - train - INFO - step: 2030, loss: 4.852210521697998
+2021-12-10 05:58:55,941 - train - INFO - step: 2040, loss: 4.853797435760498
+2021-12-10 05:58:59,393 - train - INFO - Validation loss: 4.129507839679718
+2021-12-10 05:58:59,393 - train - INFO - --------------------
+2021-12-10 05:59:02,808 - train - INFO - step: 2050, loss: 4.852808952331543
+2021-12-10 05:59:06,248 - train - INFO - step: 2060, loss: 4.85276985168457
+2021-12-10 05:59:09,694 - train - INFO - step: 2070, loss: 4.853404521942139
+2021-12-10 05:59:13,133 - train - INFO - step: 2080, loss: 4.850901126861572
+2021-12-10 05:59:16,563 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 05:59:16,564 - train - INFO - --------------------
+2021-12-10 05:59:19,010 - train - INFO - Epoch 8 done
+2021-12-10 05:59:19,010 - train - INFO - loss: 4.852093412958342
+2021-12-10 05:59:19,011 - train - INFO - --------------------
+2021-12-10 05:59:22,894 - train - INFO - step: 2090, loss: 4.853903293609619
+2021-12-10 05:59:26,288 - train - INFO - step: 2100, loss: 4.851254940032959
+2021-12-10 05:59:33,566 - train - INFO - Retrieve on validation:
+2021-12-10 05:59:33,567 - train - INFO - top1_acc, top5_acc, top10_acc: 0.0010000000474974513, 0.005000000353902578, 0.010000000707805157
+2021-12-10 05:59:33,567 - train - INFO - --------------------
+2021-12-10 05:59:36,936 - train - INFO - step: 2110, loss: 4.852429389953613
+2021-12-10 05:59:40,342 - train - INFO - step: 2120, loss: 4.8516058921813965
+2021-12-10 05:59:44,136 - train - INFO - Validation loss: 4.129507973790169
+2021-12-10 05:59:44,137 - train - INFO - --------------------
+2021-12-10 05:59:47,533 - train - INFO - step: 2130, loss: 4.851932048797607
+2021-12-10 05:59:50,948 - train - INFO - step: 2140, loss: 4.852319717407227
+2021-12-10 05:59:54,389 - train - INFO - step: 2150, loss: 4.852604389190674
+2021-12-10 05:59:57,841 - train - INFO - step: 2160, loss: 4.8518452644348145
+2021-12-10 06:00:01,455 - train - INFO - Validation loss: 4.129507884383202
+2021-12-10 06:00:01,455 - train - INFO - --------------------
+2021-12-10 06:00:04,875 - train - INFO - step: 2170, loss: 4.8531813621521
+2021-12-10 06:00:08,316 - train - INFO - step: 2180, loss: 4.851165771484375
+2021-12-10 06:00:11,766 - train - INFO - step: 2190, loss: 4.851190090179443
+2021-12-10 06:00:15,210 - train - INFO - step: 2200, loss: 4.851709365844727
+2021-12-10 06:00:18,740 - train - INFO - Validation loss: 4.129507854580879
+2021-12-10 06:00:18,741 - train - INFO - --------------------
+2021-12-10 06:00:22,145 - train - INFO - step: 2210, loss: 4.851355075836182
+2021-12-10 06:00:25,567 - train - INFO - step: 2220, loss: 4.853227138519287
+2021-12-10 06:00:28,992 - train - INFO - step: 2230, loss: 4.851728439331055
+2021-12-10 06:00:32,425 - train - INFO - step: 2240, loss: 4.852756500244141
+2021-12-10 06:00:36,069 - train - INFO - Validation loss: 4.12950773537159
+2021-12-10 06:00:36,070 - train - INFO - --------------------
+2021-12-10 06:00:39,441 - train - INFO - step: 2250, loss: 4.852383613586426
+2021-12-10 06:00:42,820 - train - INFO - step: 2260, loss: 4.852397441864014
+2021-12-10 06:00:46,204 - train - INFO - step: 2270, loss: 4.851540565490723
+2021-12-10 06:00:49,589 - train - INFO - step: 2280, loss: 4.850332736968994
+2021-12-10 06:00:53,129 - train - INFO - Validation loss: 4.129507884383202
+2021-12-10 06:00:53,130 - train - INFO - --------------------
+2021-12-10 06:00:56,492 - train - INFO - step: 2290, loss: 4.854065895080566
+2021-12-10 06:00:59,869 - train - INFO - step: 2300, loss: 4.851046562194824
+2021-12-10 06:01:03,275 - train - INFO - step: 2310, loss: 4.8529229164123535
+2021-12-10 06:01:06,426 - train - INFO - Epoch 9 done
+2021-12-10 06:01:06,426 - train - INFO - loss: 4.852168609356058
+2021-12-10 06:01:06,426 - train - INFO - --------------------
+2021-12-10 06:01:09,820 - train - INFO - step: 2320, loss: 4.852776050567627
+2021-12-10 06:01:13,461 - train - INFO - Validation loss: 4.129507839679718
+2021-12-10 06:01:13,462 - train - INFO - --------------------
+2021-12-10 06:01:16,819 - train - INFO - step: 2330, loss: 4.853388786315918
+2021-12-10 06:01:20,216 - train - INFO - step: 2340, loss: 4.8533430099487305
+2021-12-10 06:01:23,630 - train - INFO - step: 2350, loss: 4.852130889892578
+2021-12-10 06:01:27,076 - train - INFO - step: 2360, loss: 4.852309226989746
+2021-12-10 06:01:30,668 - train - INFO - Validation loss: 4.129507780075073
+2021-12-10 06:01:30,668 - train - INFO - --------------------
+2021-12-10 06:01:34,105 - train - INFO - step: 2370, loss: 4.852164268493652
+2021-12-10 06:01:37,584 - train - INFO - step: 2380, loss: 4.8527960777282715
+2021-12-10 06:01:41,065 - train - INFO - step: 2390, loss: 4.85128116607666
+2021-12-10 06:01:44,513 - train - INFO - step: 2400, loss: 4.8521623611450195
+2021-12-10 06:01:51,686 - train - INFO - Retrieve on validation:
+2021-12-10 06:01:51,686 - train - INFO - top1_acc, top5_acc, top10_acc: 0.0010000000474974513, 0.005000000353902578, 0.008999999612569809
+2021-12-10 06:01:51,686 - train - INFO - --------------------
+2021-12-10 06:01:55,146 - train - INFO - Validation loss: 4.129507824778557
+2021-12-10 06:01:55,147 - train - INFO - --------------------
+2021-12-10 06:01:58,493 - train - INFO - step: 2410, loss: 4.851775169372559
+2021-12-10 06:02:01,875 - train - INFO - step: 2420, loss: 4.851947784423828
+2021-12-10 06:02:05,255 - train - INFO - step: 2430, loss: 4.852315425872803
+2021-12-10 06:02:08,666 - train - INFO - step: 2440, loss: 4.852375507354736
+2021-12-10 06:02:12,076 - train - INFO - Validation loss: 4.129507809877396
+2021-12-10 06:02:12,077 - train - INFO - --------------------
+2021-12-10 06:02:15,461 - train - INFO - step: 2450, loss: 4.850933074951172
+2021-12-10 06:02:18,872 - train - INFO - step: 2460, loss: 4.852837085723877
+2021-12-10 06:02:22,280 - train - INFO - step: 2470, loss: 4.852476119995117

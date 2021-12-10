@@ -1,0 +1,56 @@
+{
+    "exp_base": "experiments",
+    "exp_name": "find_photo",
+    "device": "cuda",
+    "data": {
+        "train_path": "../Flickr30k-Dataset/flickr30k-all/train",
+        "val_path":  "../Flickr30k-Dataset/flickr30k-all/validation",
+        "test_path": "../Flickr30k-Dataset/flickr30k-all/test",
+
+        "num_workers": 4,
+
+        "num_objects": 15,
+        "num_image_position": 4,
+
+        "vocab_path": "vocab.json",
+        "max_len": 30,
+        "vocab_size": 6404
+    },
+    "model": {
+        "backbone": "transformer",
+        "embedding_size": 512,
+
+        "image_encoder_dropout_rate": 0.2,
+        "image_embedding_dropout_rate": 0.1,
+        "num_image_encoder_head": 1,
+        "num_image_encoder_layer": 2,
+        
+        "text_encoder_dropout_rate": 0.2,
+        "text_embedding_dropout_rate": 0.1,
+        "num_text_encoder_head": 1,
+        "num_text_encoder_layer": 2
+    },
+    "solver": {
+        "num_epochs": 120,
+        "batch_size": 128,
+
+        "optimizer": "AdamW",
+
+        "learning_rate": 2e-4,
+        "weight_decay": 2e-8,
+        "max_grad_norm": 2,
+
+        "scheduler": "StepLR",
+
+        "checkpoint_period": 4000,
+        "log_period": 10,
+        "eval_period": 300,
+        "eval_loss_period": 40
+    },
+    "test": {
+        "batch_size": 64,
+        "num_workers": 4,
+        "pretrained_path": "experiments/find_photo/1639089690.9783187/best.pth",
+        "images_base_path": "../Flickr30k-Dataset/flickr30k-images"
+    }
+}
