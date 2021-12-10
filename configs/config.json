@@ -20,13 +20,13 @@
         "backbone": "transformer",
         "embedding_size": 512,
 
-        "image_encoder_dropout_rate": 0.2,
+        "image_encoder_dropout_rate": 0.1,
         "image_embedding_dropout_rate": 0.1,
         "num_image_encoder_head": 1,
         "num_image_encoder_layer": 2,
         
         "text_encoder_dropout_rate": 0.3,
-        "text_embedding_dropout_rate": 0.2,
+        "text_embedding_dropout_rate": 0.1,
         "num_text_encoder_head": 1,
         "num_text_encoder_layer": 2
     },
@@ -36,7 +36,7 @@
 
         "optimizer": "AdamW",
 
-        "learning_rate": 5e-4,
+        "learning_rate": 3e-4,
         "weight_decay": 1e-8,
         "max_grad_norm": 2,
 
