@@ -8,8 +8,6 @@ def make_optimizer(cfg, model):
         optimizer = torch.optim.Adam(model.parameters(), lr=cfg.solver.learning_rate,
                                      weight_decay=cfg.solver.weight_decay)
     elif cfg.solver.optimizer == 'AdamW':
-        # optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=cfg.solver.learning_rate,
-        #                               weight_decay=cfg.solver.weight_decay)
         optimizer = torch.optim.AdamW(model.parameters(), lr=cfg.solver.learning_rate,
                                       weight_decay=cfg.solver.weight_decay)
     return optimizer
@@ -18,11 +16,13 @@ def make_optimizer(cfg, model):
 def make_scheduler(cfg, optimizer):
     scheduler = None
     if cfg.solver.scheduler == 'CosineAnnealingWarmRestarts':
-        scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=cfg.solver.T_0, T_mult=cfg.solver.T_mult)
+        scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=400, T_mult=1)
     elif cfg.solver.scheduler == 'ExponentialLR':
-        scheduler = ExponentialLR(optimizer, gamma=cfg.solver.gamma)
-    elif cfg.solver.schedule == 'CosineAnnealingLR':
-        scheduler = CosineAnnealingLR(optimizer, T_max=cfg.solver.T_max)
-    elif cfg.solver.schedule == 'ConstantLR':
-        scheduler = StepLR(optimizer, step_size=cfg.solver.num_epochs, gamma=1)
+        scheduler = ExponentialLR(optimizer, gamma=0.95)
+    elif cfg.solver.scheduler == 'CosineAnnealingLR':
+        scheduler = CosineAnnealingLR(optimizer, T_max=00)
+    elif cfg.solver.scheduler == 'StepLR':
+        scheduler = StepLR(optimizer, step_size=6000, gamma=0.1)
+    elif cfg.solver.scheduler == 'ConstantLR':
+        scheduler = StepLR(optimizer, step_size=100, gamma=1)
     return scheduler

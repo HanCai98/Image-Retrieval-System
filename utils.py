@@ -3,6 +3,8 @@ import numpy as np
 import logging
 import os
 import dotmap
+import nltk
+nltk.download('wordnet')
 from nltk.stem import WordNetLemmatizer
 import pickle
 
@@ -15,9 +17,9 @@ class SimpleTokenizer:
         # <UNKNOWN> index: self.num_word; <PAD> index: self.num_word + 1
         self.max_len = max_len
 
-    def build_vocab(self, texts, min_freq=5, save_path='data/vocab.json'):
+    def build_vocab(self, texts, min_freq=5, save_path='vocab.json'):
         '''
-        :param texts: str, words are split by whitespace. list of list of word.
+        :param texts: list of list of word.
         :param min_freq: if the frequency of word is less than min_freq, it will be identified as <UNKNOWN>
         '''
         word_freq = {}
@@ -58,13 +60,13 @@ class SimpleTokenizer:
 
 def load_pkl(filepath):
     with open(filepath, 'rb') as f:
-        data = json.load(f)
+        data = pickle.load(f)
     return data
 
 
 def save_pkl(data, filepath):
     with open(filepath, 'wb') as f:
-        pickle.dump(data, f)
+        pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 def load_json(filepath):
@@ -117,12 +119,16 @@ class AverageMeter(object):
 
 if __name__ == '__main__':
     texts = []
-    dic = load_json('data/train.json')
+    dic = load_json('../Flickr30k-Dataset/train.json')
     for img_name, info in dic.items():
         for text in info[:-1]:
             texts.append(text.split(' '))
     tokenizer = SimpleTokenizer()
-    tokenizer.build_vocab(texts)
+    tokenizer.build_vocab(texts, 5, 'vocab.json')
+    count = 0
     for img_name, info in dic.items():
+        count += 1
+        if count >= 10:
+            break
         for text in info[:-1]:
             print(tokenizer.convert_to_id(text))

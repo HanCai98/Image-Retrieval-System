@@ -25,11 +25,11 @@ class PairDataset(Dataset):
         info = utils.load_pkl(file_path)
 
         text = random.choice(info[:5])
-        text_ids = torch.tensor(self.tokenizer.convert_to_id(text))
+        text_ids = torch.tensor(self.tokenizer.convert_to_id(text), dtype=torch.int)
         text_mask = torch.where(text_ids == self.tokenizer.num_words + 1, 0, 1)
 
-        object_positions = torch.from_numpy(np.array(info[5: 5+self.num_objects]))
-        object_embeddings = torch.from_numpy(np.array(info[5+2*self.num_objects:]))
+        object_positions = torch.tensor(np.array(info[5: 5+self.num_objects]), dtype=torch.float32)
+        object_embeddings = torch.tensor(np.array(info[5+2*self.num_objects:]), dtype=torch.float32)
 
         return object_positions, object_embeddings, text_ids, text_mask, img_name
 
@@ -42,19 +42,19 @@ def _process_anno(path):
 def _make_train_loader(cfg):
     anno = _process_anno(cfg.data.train_path)
     tokenizer = utils.SimpleTokenizer(cfg.data.max_len)
-    tokenizer.load_vocab(cfg.data.tokenizer_path)
-    dataset = PairDataset(anno, cfg.num_objects, tokenizer)
+    tokenizer.load_vocab(cfg.data.vocab_path)
+    dataset = PairDataset(anno, cfg.data.num_objects, tokenizer)
     logger = logging.getLogger('train')
     logger.info('Total train samples: {}'.format(len(dataset)))
-    dataloader = DataLoader(dataset, batch_size=cfg.solver.batch_size, num_workers=cfg.data_loader.num_workers, shuffle=True)
+    dataloader = DataLoader(dataset, batch_size=cfg.solver.batch_size, num_workers=cfg.data.num_workers, shuffle=True, drop_last=True)
     return dataloader
 
 
 def _make_val_loader(cfg):
     anno = _process_anno(cfg.data.val_path)
     tokenizer = utils.SimpleTokenizer(cfg.data.max_len)
-    tokenizer.load_vocab(cfg.data.tokenizer_path)
-    dataset = PairDataset(anno, cfg.num_objects, tokenizer)
+    tokenizer.load_vocab(cfg.data.vocab_path)
+    dataset = PairDataset(anno, cfg.data.num_objects, tokenizer)
     dataloader = DataLoader(dataset, batch_size=cfg.test.batch_size, num_workers=cfg.test.num_workers)
     return dataloader
 
@@ -62,8 +62,8 @@ def _make_val_loader(cfg):
 def _make_test_loader(cfg):
     anno = _process_anno(cfg.data.test_path)
     tokenizer = utils.SimpleTokenizer(cfg.data.max_len)
-    tokenizer.load_vocab(cfg.data.tokenizer_path)
-    dataset = PairDataset(anno, cfg.num_objects, tokenizer)
+    tokenizer.load_vocab(cfg.data.vocab_path)
+    dataset = PairDataset(anno, cfg.data.num_objects, tokenizer)
     dataloader = DataLoader(dataset, batch_size=cfg.test.batch_size, num_workers=cfg.test.num_workers)
     return dataloader
 

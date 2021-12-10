@@ -24,14 +24,17 @@ class Trainer(object):
         self.optim = optimizer
         self.scheduler = scheduler
         self.loss_func = loss_func
+        self.max_grad_norm = cfg.solver.max_grad_norm
 
         self.log_period = cfg.solver.log_period
         self.checkpoint_period = cfg.solver.checkpoint_period
         self.eval_period = cfg.solver.eval_period
+        self.eval_loss_period = cfg.solver.eval_loss_period
 
-        self.loss_avg = AverageMeter()
+        self.loss_avg = AverageMeter()  # record average loss per epoch
         self.loss_batch = 0
         self.max_acc = 0
+        self.min_loss = float('inf')
         self.cur_epoch = 0  # start from 0
         self.cur_batch = 0  # start from 0
         self.steps = 0  # total steps
@@ -52,20 +55,26 @@ class Trainer(object):
     def finish_batch(self):
         if self.steps % self.log_period == 0 and self.steps != 0:
             self.writer.add_scalar('loss/train', self.loss_batch, self.steps)
+            self.logger.info('step: {}, loss: {}'.format(self.steps, self.loss_batch))
         if self.steps % self.checkpoint_period == 0 and self.steps != 0:
             self.save()
-        if self.steps % self.eval_period == 0:
+        if self.steps % self.eval_period == 0 and self.steps != 0:
             top1_acc, top5_acc, top10_acc = self.evaluate()
-            self.logger.info('Validation Result:')
+            self.logger.info('Retrieve on validation:')
             self.logger.info('top1_acc, top5_acc, top10_acc: {}, {}, {}'.format(top1_acc, top5_acc, top10_acc))
             self.logger.info('-' * 20)
-            self.writer.add_scalar('loss/top1_acc', top1_acc, self.steps)
-            self.writer.add_scalar('loss/top5_acc', top5_acc, self.steps)
-            self.writer.add_scalar('loss/top10_acc', top10_acc, self.steps)
-            if top5_acc > self.max_acc:
-                self.logger.info('Best top5_acc: {}'.format(top5_acc))
+            self.writer.add_scalar('retrieval/top1_acc', top1_acc, self.steps)
+            self.writer.add_scalar('retrieval/top5_acc', top5_acc, self.steps)
+            self.writer.add_scalar('retrieval/top10_acc', top10_acc, self.steps)
+        if self.steps % self.eval_loss_period == 0 and self.steps != 0:
+            val_loss = self.evaluate_loss()
+            self.logger.info('Validation loss: {}'.format(val_loss))
+            self.writer.add_scalar('loss/validtion', val_loss, self.steps)
+            if val_loss < self.min_loss:
+                self.logger.info('Min loss: {}'.format(val_loss))
                 self.save(True)
-                self.max_acc = top5_acc
+                self.min_loss = val_loss
+            self.logger.info('-' * 20)
         self.cur_batch += 1
         self.steps += 1
 
@@ -75,36 +84,28 @@ class Trainer(object):
         self.logger.info('loss: {}'.format(self.loss_avg.avg))
         self.logger.info('-' * 20)
         self.cur_epoch += 1
+        self.loss_avg.reset()
 
     def step(self, batch):
         self.model.train()
         self.optim.zero_grad()
         [object_positions, object_embeddings, text_ids, text_masks, img_names] = batch
-        # self.logger.info('img_path')
-        # self.logger.info(img_path)
-        # self.logger.info('texts')
-        # self.logger.info(texts)
         object_positions, object_embeddings = object_positions.to(self.device), object_embeddings.to(self.device)
         text_ids, text_masks = text_ids.to(self.device), text_masks.to(self.device)
 
         similarity_matrix = self.model(object_positions, object_embeddings, text_ids, text_masks)
-        # self.logger.info('probs_images')
-        # self.logger.info(probs_per_image.detach().cpu().numpy())
-        # self.logger.info('probs_texts')
-        # self.logger.info(probs_per_text.detach().cpu().numpy())
         loss = self.loss_func(similarity_matrix)
         # self.logger.info('loss')
         # self.logger.info(loss.detach().cpu().numpy())
         loss.backward()
+        # torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.max_grad_norm)
         self.optim.step()
         self.scheduler.step()
 
-        # del images, texts, logits_per_image, logits_per_texts, probs_per_image, probs_per_text
         self.loss_batch = loss.detach().cpu().item()
         self.loss_avg.update(self.loss_batch)
 
     def evaluate(self):
-        # torch.cuda.empty_cache()
         self.model.eval()
         image_feature_all = []
         text_feature_all = []
@@ -117,12 +118,10 @@ class Trainer(object):
             image_features = self.model.image_encoder(object_positions, object_embeddings)  # [B, S, E]
             text_features = self.model.text_encoder(text_ids, text_masks)  # [B, S, E]
 
-            image_feature_all.append(image_features.detach().cpu())
-            text_feature_all.append(text_features.detach().cpu())
+            image_feature_all.append(image_features.detach())
+            text_feature_all.append(text_features.detach())
             text_masks_all.append(text_masks)
             image_names_all.extend(img_names)
-
-            # del images, texts, image_features, text_features
 
         image_features = torch.cat(image_feature_all, dim=0)  # [N, S, E]
         text_features = torch.cat(text_feature_all, dim=0)  # [N, S, E]
@@ -135,7 +134,7 @@ class Trainer(object):
             text_mask = text_masks[i]
             similarity_scores = self.model.interaction_model(
                 image_features, torch.unsqueeze(text_feature, dim=0), torch.unsqueeze(text_mask, dim=0))  # (1, N)
-            similarity_scores_all.append(similarity_scores)
+            similarity_scores_all.append(similarity_scores.detach().cpu())
         scores = torch.cat(similarity_scores_all, dim=0)  # (N, N)  text -> image
 
         top10 = torch.argsort(scores, dim=1, descending=True)[:, :10]
@@ -155,9 +154,19 @@ class Trainer(object):
         # results = [[a, b] for a, b in zip(image_names, predicted_img_paths)]
         # utils.save_json(results, 'retrieve_info.json')
 
-        # torch.cuda.empty_cache()
         return top1_acc, top5_acc, top10_acc
 
+    def evaluate_loss(self):
+        self.model.eval()
+        loss_am = AverageMeter()
+        for batch in self.val_dl:
+            [object_positions, object_embeddings, text_ids, text_masks, img_names] = batch
+            object_positions, object_embeddings = object_positions.to(self.device), object_embeddings.to(self.device)
+            text_ids, text_masks = text_ids.to(self.device), text_masks.to(self.device)
+            similarity_matrix = self.model(object_positions, object_embeddings, text_ids, text_masks)
+            loss = self.loss_func(similarity_matrix)
+            loss_am.update(loss.detach().cpu().item())
+        return loss_am.avg
 
     def save(self, is_best=False):
         if is_best:
