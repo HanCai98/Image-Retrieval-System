@@ -22,3 +22,6 @@ You can find a pretrained **Faster R-CNN object detection model** at [here](http
 
 You can find our writeup at [here](https://docs.google.com/document/d/1cVsk5P0fYlyQjy05dqlTOunm5MycKCBoMQqiX8fE7tA/edit?usp=sharing).
 
+## Presentation
+
+You can find our project presentation at [here](https://devpost.com/software/find-a-photo-in-the-album).
